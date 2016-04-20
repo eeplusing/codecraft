@@ -1,0 +1,100 @@
+package com.routesearch.route;
+
+import java.util.ArrayList;
+
+/************************************************************************************
+ * @Title        : Route.java
+ * @Todo         : 路径
+ * @Author       : CaoPeng
+ * @DateTime     : 2016年3月17日 下午9:06:02
+ * @Copyright    : 2016 LLC All Rights Reserved
+ * @version      : V1.0
+ ************************************************************************************/
+public final class Route
+{
+    /*功能的入口
+     * 功能要求：1.有向边的编号连续或不连续
+     *		  2.路径经过所有子集V'
+     *		  3.路径不过重复点
+     * */
+    public static String searchRoute(String graphContent, String condition)
+    {
+    	/*1.解析图数据；填充邻接矩阵；
+    	 * 注意：
+    	 * 	边的编号不连续；
+    	 * 	sourceId与destinationId相同者只取权值小的；
+    	 */
+    	/*解析graphContent*/
+    	ArrayList<Integer> vertexList = new ArrayList<Integer>();
+    	String[] edgeArray = graphContent.split("\n");
+    	//获取顶点数
+    	int numOfVertexs = getNumOfVertexs(vertexList,edgeArray);
+    	
+    	Graph graph = new Graph(numOfVertexs);
+    	
+    	/*填充邻接矩阵,去除重复边,只保留权值较小的边*/
+    	for(String edge:edgeArray)
+    	{
+    		String[] edgeString =  edge.split(",");
+    		graph.insertEdge(Integer.parseInt(edgeString[1]), Integer.parseInt(edgeString[2]),
+    				Integer.parseInt(edgeString[3]));
+    	}
+    	
+    	/*解析condition*/
+    	String[] conditionArr =  condition.replace("\n", "").split(",");
+    	
+    	int startVertex = Integer.parseInt(conditionArr[0]);
+    	int targetVertex = Integer.parseInt(conditionArr[1]);
+    	
+    	//存储需要经过的点集
+    	ArrayList<Integer> crossedVertexList = new ArrayList<Integer>();
+    	for(String  vertexArr:conditionArr[2].split("|"))
+    	{
+    		crossedVertexList.add(Integer.parseInt(vertexArr));
+    	}
+    	
+    	
+    	graph.depthFirstSearch(startVertex);
+    	
+    	/*2.用dijstra查找最小路径，若存在最小路径，找出最小路径*/
+    	
+    	
+    	/*3.解析必须经过的子集，检验是否包含子集*/
+    	
+    	
+    	
+    	
+    	
+    	/*检验是否包含子集*/
+    	
+    	
+    	/*4.检验路径中是否存在环路*/
+    	
+    	
+    	/*5.解析要求条件*/
+    	
+    	
+        return "result";
+    }
+
+	private static int getNumOfVertexs(ArrayList<Integer> vertexList, String[] edgeArray)
+	{
+		int v1,v2;
+		for(String edge:edgeArray)
+    	{
+    		String[] edgeString =  edge.split(",");
+    		/*添加点*/
+    		v1 = Integer.parseInt(edgeString[1]);
+    		v2 = Integer.parseInt(edgeString[2]);
+    		if(!vertexList.contains(v1))
+    		{
+    			vertexList.add(v1);
+    		}
+    		if(!vertexList.contains(v2))
+    		{
+    			vertexList.add(v2);
+    		}
+    	}
+		return vertexList.size();
+	}
+}
